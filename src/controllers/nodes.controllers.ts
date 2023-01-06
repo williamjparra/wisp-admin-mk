@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createNodeService, deleteNodeService, getNodeService, getNodesService } from "../services/node.services";
+import { createNodeService, deleteNodeService, getNodeService, getNodesService, updateNodeService } from "../services/node.services";
 
 
 const getNodes = async (req: Request, res: Response) => {
@@ -54,7 +54,7 @@ const deleteNode = async (req: Request, res: Response) => {
 const updateNode = async (req: Request, res: Response) => {
     try {
         const { params, body } = req
-        const response = await getNodeService(params.id, body)
+        const response = await updateNodeService(params.id, body)
         res.status(200)
         res.json(response) 
     } catch (error) {

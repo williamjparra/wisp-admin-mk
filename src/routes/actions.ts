@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { activateClient, activateClients, cutClient, cutClients } from "../controllers/actions.controllers";
+import { 
+    activateClient, 
+    activateClients, 
+    cutClient, 
+    cutClients 
+} from "../controllers/actions.controllers";
 
 const router = Router()
 
