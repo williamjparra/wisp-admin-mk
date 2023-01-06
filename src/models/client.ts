@@ -109,7 +109,11 @@ const ClientSchema = new Schema<Client>(
         tags: [{
             type: String,
             default: ""
-        }]
+        }],
+        status: {
+            type: Boolean,
+            default: true
+        }
     },
     {
         timestamps: true,

@@ -14,7 +14,8 @@ export interface Client {
     totalPayment: number,
     conectionDate: string,
     monthpaid: [Paid],
-    tags?: [string]
+    tags?: [string],
+    status: boolean,
 }
 
 export interface Paid {
