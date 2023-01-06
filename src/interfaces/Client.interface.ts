@@ -1,6 +1,7 @@
 export interface Client {
     name: string,
-    pppoeName: string,
+    pppoeName: string | null,
+    ip: string | null,
     idDoc: string,
     address: string,
     LatLon: {
@@ -12,11 +13,12 @@ export interface Client {
     baseSpeed: number,
     totalPayment: number,
     conectionDate: string,
-    monthpaid: [Paid]
+    monthpaid: [Paid],
+    tags?: [string]
 }
 
 export interface Paid {
-    years: number,
+    year: number,
     jan: boolean,
     feb: boolean,
     mar: boolean,
