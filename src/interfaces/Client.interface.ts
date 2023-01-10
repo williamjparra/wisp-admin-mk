@@ -16,6 +16,7 @@ export interface Client {
     monthpaid: [Paid],
     tags?: [string],
     status: boolean,
+    clienttype: string
 }
 
 export interface Paid {

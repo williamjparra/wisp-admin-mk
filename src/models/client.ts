@@ -113,6 +113,12 @@ const ClientSchema = new Schema<Client>(
         status: {
             type: Boolean,
             default: true
+        },
+        clienttype: {
+            type: String,
+            enum: ["dedicados", "compartidos"],
+            required: true,
+            default: "compartidos"
         }
     },
     {

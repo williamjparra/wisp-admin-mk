@@ -1,8 +1,17 @@
 import { Client } from "../interfaces/Client.interface"
 import clientModel from "../models/client"
 import nodeModel from "../models/node"
-import { execSSH, execSSHBulk } from "../utils/ssh"
-import { disableIPCut, disablePPPoe, enableIPCut, enablePPPoe, removePPPOE } from "../utils/ssh.commands"
+import { 
+    execSSH, 
+    execSSHBulk 
+} from "../utils/ssh"
+import { 
+    disableIPCut, 
+    disablePPPoe, 
+    enableIPCut, 
+    enablePPPoe, 
+    removePPPOE 
+} from "../utils/ssh.commands"
 
 const activateClientService = async (_id: string) => {
     const client = await <Client | any>clientModel.findById(_id)
