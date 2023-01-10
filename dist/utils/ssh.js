@@ -1,31 +1,61 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.callSSH = void 0;
+exports.execSSHBulk = exports.execSSH = void 0;
 const node_ssh_1 = require("node-ssh");
-const callSSH = () => {
+require("dotenv/config");
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
+const callSSH = (command, node) => __awaiter(void 0, void 0, void 0, function* () {
     const ssh = new node_ssh_1.NodeSSH();
-    ssh.connect({
-        host: '10.30.30.1',
-        username: 'william',
-        password: 'William27658945'
-    }).then((_a) => {
-        var rest = __rest(_a, []);
-        console.log("initial data", rest);
-        ssh.execCommand('log info message=test-1').then((_a) => {
-            var rest2 = __rest(_a, []);
-            return console.log(rest2);
-        }).catch(err => console.log(err));
-    }).catch(err => console.log(err));
-};
-exports.callSSH = callSSH;
+    yield ssh.connect({
+        host: node,
+        username,
+        password
+    });
+    const response = yield ssh.execCommand(command);
+    console.log(response.stdout);
+    ssh.dispose();
+});
+function connect(host, ssh) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield ssh.connect({
+            host,
+            username,
+            password
+        });
+    });
+}
+const callSSHBulk = (commands, node) => __awaiter(void 0, void 0, void 0, function* () {
+    const ssh = new node_ssh_1.NodeSSH();
+    var current = null;
+    commands.forEach((command, i) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!current) {
+            connect(node[i], ssh);
+        }
+        if (current !== node[i]) {
+            ssh.dispose();
+            connect(node[i], ssh);
+        }
+        const response = yield ssh.execCommand(command);
+        console.log(response.stdout);
+    }));
+    if (ssh.isConnected())
+        ssh.dispose();
+});
+const execSSH = (command, node) => __awaiter(void 0, void 0, void 0, function* () {
+    yield callSSH(command, node);
+});
+exports.execSSH = execSSH;
+const execSSHBulk = (commands, node) => __awaiter(void 0, void 0, void 0, function* () {
+    yield callSSHBulk(commands, node);
+});
+exports.execSSHBulk = execSSHBulk;
